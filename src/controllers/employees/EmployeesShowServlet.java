@@ -2,6 +2,7 @@ package controllers.employees;
 
 import java.io.IOException;
 
+import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,19 +11,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Employee;
+import utils.DBUtil;
 import utils.PropertyUtils;
 
 /**
- * Servlet implementation class EmployeesNewServlet
+ * Servlet implementation class EmployeesShowServlet
  */
-@WebServlet("/employees/new")
-public class EmployeesNewServlet extends HttpServlet {
+@WebServlet("/employees/show")
+public class EmployeesShowServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public EmployeesNewServlet() {
+    public EmployeesShowServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,14 +34,18 @@ public class EmployeesNewServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    
-	    final String REQ__TOKEN = "_token";
-	    final String REQ_EMPLOYEE = "employee";
+	    final String REQ_ID = "id";
 	    
-	    request.setAttribute(REQ__TOKEN, request.getSession().getId());
-	    request.setAttribute(REQ_EMPLOYEE, new Employee());
+	    EntityManager em  = DBUtil.createEntityManager();
 	    
-	    RequestDispatcher rd = request.getRequestDispatcher(PropertyUtils.FORWARD_EMPLOYEES_NEW);
+	    Employee e = em.find(Employee.class, Integer.parseInt(request.getParameter(REQ_ID)));
+
+	    em.close();
+	    
+	    request.setAttribute("employee", e);
+	    request.setAttribute("_token", request.getSession().getId());
+	    
+	    RequestDispatcher rd = request.getRequestDispatcher(PropertyUtils.FORWARD_EMPLOYEES_SHOW);
 	    rd.forward(request, response);
 	}
-
 }

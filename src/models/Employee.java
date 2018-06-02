@@ -13,6 +13,8 @@ import javax.persistence.Table;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
+
 import utils.EncryptUtil;
 
 
@@ -126,24 +128,52 @@ public class Employee {
         this.delete_flag = delete_flag;
     }
     
-    public void setEditedItems(HttpServletRequest request, HttpServlet servlet, boolean isUpdate) {
-        
-       this.setCode(request.getParameter("code"));
+    /**
+     * 編集情報の設定
+     * @param request
+     * @param servlet
+     * @param isUpdate    更新処理である
+     */
+    public void setEditedItems(HttpServletRequest request, HttpServlet servlet, boolean isNewRecord) {
+
+   /* コード */
+       // インスタンスのコードと入力値のコードが異なる場合
+       if (this.getCode().equals(request.getParameter("code"))) {
+           // インスタンス変数に入力値を設定
+           this.setCode(request.getParameter("code"));
+       }
+       
+
+   /* 名前 */
+       // インスタンス変数に入力値を設定
        this.setName(request.getParameter("name"));
-       this.setPassword(
-               EncryptUtil.getPasswordEncrypt(
-                       request.getParameter("password"),
-                       (String)servlet.getServletContext().getAttribute("salt")
-               )
-       );
+       
+   /* パスワード */
+       // パスワードが未入力でない場合
+       if (!StringUtils.isEmpty(request.getParameter("password"))) {
+           this.setPassword(
+                   EncryptUtil.getPasswordEncrypt(
+                           request.getParameter("password"),
+                           (String)servlet.getServletContext().getAttribute("salt")
+                   )
+           );
+       }
+
+   /* 管理者フラグ*/
        this.setAdmin_flag(Integer.parseInt(request.getParameter("admin_flag")));
        
        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-       if (!isUpdate) {
-           this.setCreated_at(currentTime);
-           this.setDelete_flag(0);
-       }
-       this.setUpdated_at(currentTime);
        
+   /* 作成日時*/
+       // 新規追加である場合
+       if (!isNewRecord) {
+           this.setCreated_at(currentTime);
+       }
+       
+   /* 更新日時*/
+       this.setUpdated_at(currentTime);
+   
+   /* 削除フラグ */
+       this.setDelete_flag(0);
     }
 }

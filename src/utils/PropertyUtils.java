@@ -24,12 +24,12 @@ public class PropertyUtils {
     public static final String FORWARD_EMPLOYEES_UPDATE = "/WEB-INF/views/employees/update.jsp";
     public static final String FORWARD_EMPLOYEES_DESTROY = "/WEB-INF/views/employees/destroy.jsp";
 
-    /* Employees Request Session */
-    public static final String REQUEST_EMPLOYEES = "employees";
-    public static final String REQUEST_EMPLOYEES_COUNT = "employees_count";
-    public static final String REQUEST_FLUSH = "flush";
-    public static final String REQUEST_PAGE = "page";
-    public static final String REQUEST_TOKEN = "_token";
+//    /* Employees Request Session */
+//    public static final String REQUEST_EMPLOYEES = "employees";
+//    public static final String REQUEST_EMPLOYEES_COUNT = "employees_count";
+//    public static final String REQUEST_FLUSH = "flush";
+//    public static final String REQUEST_PAGE = "page";
+//    public static final String REQUEST_TOKEN = "_token";
 
 
 

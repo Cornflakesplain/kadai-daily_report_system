@@ -37,9 +37,12 @@ public class EmployeesCreateServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-	    if(ServletUtils.isTrueSession(request)) {
+	    final String REQ_FLUSH = "flush";
+	    
+	    if(ServletUtils.isFairSession(request)) {
 	
 	        Employee e = new Employee();
+	        
 	        // 追加に必要な情報を取得
 	        e.setEditedItems(request, this, false);
 	        
@@ -51,19 +54,29 @@ public class EmployeesCreateServlet extends HttpServlet {
 	        
 	        // 入力エラーが存在する場合
 	        if(errors.size() > 0) {
+	            
+	            // コネクションクローズ
 	            em.close();
+	            
+	            // エラー情報を設定
 	            ServletUtils.setInputError(request,response,e,errors);
 	            
+	            // 遷移先を設定してフォワード
 	            RequestDispatcher rd = request.getRequestDispatcher(PropertyUtils.FORWARD_EMPLOYEES_NEW);
 	            rd.forward(request, response);
 
 	        } else
+	            
+	            // 取得した情報を基にデータベース更新
 	            em.getTransaction().begin();
 	            em.persist(e);
 	            em.getTransaction();
 	            em.close();
-	            request.getSession().setAttribute("flush", "登録が完了しました。");
 	            
+	            // Flashメッセージの設定
+	            request.getSession().setAttribute(REQ_FLUSH, "登録が完了しました。");
+	            
+	            // 指定のパスに遷移
 	            response.sendRedirect(request.getContextPath() + "/employees/index");
 	            
 	    }

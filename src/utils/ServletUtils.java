@@ -13,23 +13,27 @@ import models.Employee;
 */
 public class ServletUtils 
 {
+    static final String REQ__TOKEN = "_token";
+    static final String REQ_EMPLOYEE = "employee";
+    static final String REQ_ERRORS = "errors";
+    
     /**
     * @author J.Tamura
     * @セッション判定 
     * @param request
     * @return true/正しいセッションである : false/不正なセッションである
     */
-    public static boolean isTrueSession(HttpServletRequest request) 
+    public static boolean isFairSession(HttpServletRequest request) 
     {
         
-        String _token = (String)request.getParameter("_token");
+        String _token = (String)request.getParameter(REQ__TOKEN);
         if(_token !=null && _token.equals(request.getSession().getId())) 
         {
             return true;
         }
         return false;
     }
-    
+
     /**
     * @author J.Tamura
     * @入力エラー 
@@ -43,8 +47,8 @@ public class ServletUtils
             , Employee e
             , List<String> errors)
     {
-        request.setAttribute("_token", request.getSession().getId());
-        request.setAttribute("employee", e);
-        request.setAttribute("errors", errors);
+        request.setAttribute(REQ__TOKEN, request.getSession().getId());
+        request.setAttribute(REQ_EMPLOYEE, e);
+        request.setAttribute(REQ_ERRORS, errors);
     }
 }
