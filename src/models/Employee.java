@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 import utils.EncryptUtil;
 
@@ -132,25 +132,28 @@ public class Employee {
      * 編集情報の設定
      * @param request
      * @param servlet
-     * @param isUpdate    更新処理である
+     * @param isUpdate    新規追加である
      */
     public void setEditedItems(HttpServletRequest request, HttpServlet servlet, boolean isNewRecord) {
 
-   /* コード */
-       // インスタンスのコードと入力値のコードが異なる場合
-       if (this.getCode().equals(request.getParameter("code"))) {
-           // インスタンス変数に入力値を設定
-           this.setCode(request.getParameter("code"));
+        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+        
+       // 新規追加である場合
+       if (isNewRecord) {
+           setCode(request.getParameter("code"));
+           this.setCreated_at(currentTime);
+       } else {
+           // データと入力値が異なる場合
+           if (!this.getCode().equals(request.getParameter("code"))) {
+               setCode(request.getParameter("code"));           
+           }
        }
        
-
-   /* 名前 */
        // インスタンス変数に入力値を設定
        this.setName(request.getParameter("name"));
        
-   /* パスワード */
        // パスワードが未入力でない場合
-       if (!StringUtils.isEmpty(request.getParameter("password"))) {
+       if (StringUtils.isNotEmpty(request.getParameter("password"))) {
            this.setPassword(
                    EncryptUtil.getPasswordEncrypt(
                            request.getParameter("password"),
@@ -159,21 +162,10 @@ public class Employee {
            );
        }
 
-   /* 管理者フラグ*/
        this.setAdmin_flag(Integer.parseInt(request.getParameter("admin_flag")));
        
-       Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-       
-   /* 作成日時*/
-       // 新規追加である場合
-       if (!isNewRecord) {
-           this.setCreated_at(currentTime);
-       }
-       
-   /* 更新日時*/
        this.setUpdated_at(currentTime);
    
-   /* 削除フラグ */
        this.setDelete_flag(0);
     }
 }

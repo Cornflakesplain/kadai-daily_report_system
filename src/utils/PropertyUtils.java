@@ -23,7 +23,8 @@ public class PropertyUtils {
     public static final String FORWARD_EMPLOYEES_EDIT = "/WEB-INF/views/employees/edit.jsp";
     public static final String FORWARD_EMPLOYEES_UPDATE = "/WEB-INF/views/employees/update.jsp";
     public static final String FORWARD_EMPLOYEES_DESTROY = "/WEB-INF/views/employees/destroy.jsp";
-
+    public static final String FORWARD_SESSION_ERROR = "/WEB-INF/views/common/sessionErr.jsp";
+    
 //    /* Employees Request Session */
 //    public static final String REQUEST_EMPLOYEES = "employees";
 //    public static final String REQUEST_EMPLOYEES_COUNT = "employees_count";

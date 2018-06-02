@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import models.Employee;
+import execute.EmployeeExecute;
 import utils.PropertyUtils;
 
 /**
@@ -32,11 +32,7 @@ public class EmployeesNewServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    
-	    final String REQ__TOKEN = "_token";
-	    final String REQ_EMPLOYEE = "employee";
-	    
-	    request.setAttribute(REQ__TOKEN, request.getSession().getId());
-	    request.setAttribute(REQ_EMPLOYEE, new Employee());
+	    EmployeeExecute.doNew(request, response);
 	    
 	    RequestDispatcher rd = request.getRequestDispatcher(PropertyUtils.FORWARD_EMPLOYEES_NEW);
 	    rd.forward(request, response);
