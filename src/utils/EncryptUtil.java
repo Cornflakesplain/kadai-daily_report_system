@@ -3,12 +3,15 @@ package utils;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import javax.servlet.http.HttpServlet;
 import javax.xml.bind.DatatypeConverter;
 
 public class EncryptUtil {
-    public static String getPasswordEncrypt(String plain_p, String salt) {
+    public static String getPasswordEncrypt(String plain_p, HttpServlet servlet) {
         String ret = "";
 
+        String salt = (String)servlet.getServletContext().getAttribute("salt");
+        
         if(plain_p != null && !plain_p.equals("")) {
             byte[] bytes;
             String password = plain_p + salt;

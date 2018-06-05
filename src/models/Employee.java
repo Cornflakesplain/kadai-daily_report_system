@@ -155,10 +155,7 @@ public class Employee {
        // パスワードが未入力でない場合
        if (StringUtils.isNotEmpty(request.getParameter("password"))) {
            this.setPassword(
-                   EncryptUtil.getPasswordEncrypt(
-                           request.getParameter("password"),
-                           (String)servlet.getServletContext().getAttribute("salt")
-                   )
+                   EncryptUtil.getPasswordEncrypt(request.getParameter("password"),servlet)
            );
        }
 

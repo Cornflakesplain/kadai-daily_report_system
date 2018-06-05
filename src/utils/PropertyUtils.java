@@ -14,6 +14,10 @@ public class PropertyUtils {
     public static final String QRY_CHECK_REGISTERED_CODE = "checkRegisteredCode";
     public static final String QRY_CHECK_LOGIN_CODE_AND_PASSWORD = "checkLoginCodeAndPassword";
 
+    /* Employees NamedQuerys Args*/
+    public static final String ARGS_CODE = "code";
+    public static final String ARGS_PASS = "pass";
+    
     /* Employees Action Mapping */
     public static final String FORWARD_TOPPAGE = "/WEB-INF/views/topPage/index.jsp";
     public static final String FORWARD_EMPLOYEES_INDEX = "/WEB-INF/views/employees/index.jsp";
@@ -24,6 +28,7 @@ public class PropertyUtils {
     public static final String FORWARD_EMPLOYEES_UPDATE = "/WEB-INF/views/employees/update.jsp";
     public static final String FORWARD_EMPLOYEES_DESTROY = "/WEB-INF/views/employees/destroy.jsp";
     public static final String FORWARD_SESSION_ERROR = "/WEB-INF/views/common/sessionErr.jsp";
+    public static final String FORWARD_LOGIN_LOGIN = "/WEB-INF/views/login/login.jsp";
     
 //    /* Employees Request Session */
 //    public static final String REQUEST_EMPLOYEES = "employees";

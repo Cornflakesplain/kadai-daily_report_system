@@ -155,7 +155,7 @@ public class EmployeeExecute {
         EntityManager em  = DBUtil.createEntityManager();
         
         // 対象の従業員データを取得
-        Employee e = getToReadEmployee(em, request);
+        Employee e = getEmployeeToRead(em, request);
 
         em.close();
         
@@ -174,7 +174,7 @@ public class EmployeeExecute {
         EntityManager em = DBUtil.createEntityManager();
 
         // 対象の従業員データを取得
-        Employee e = getToReadEmployee(em, request);
+        Employee e = getEmployeeToRead(em, request);
 
         em.close();
 
@@ -190,7 +190,7 @@ public class EmployeeExecute {
     * @param response
     * @return エラーフラグ
     */
-    public static Boolean doUpdate(
+    public static boolean doUpdate(
              HttpServletRequest request
            , HttpServletResponse response
            , HttpServlet servlet
@@ -202,7 +202,7 @@ public class EmployeeExecute {
             EntityManager em = DBUtil.createEntityManager();
 
             // 編集対象の従業員データを取得
-            Employee e = getToWriteEmployee(em, request);
+            Employee e = getEmployeeToWrite(em, request);
             
             // コードの変更時のみ重複チェック
             Boolean code_duplicate_check = !e.getCode().equals(request.getParameter("code"));
@@ -258,7 +258,7 @@ public class EmployeeExecute {
     * @param response
     * @return エラーフラグ
     */
-    public static Boolean doDestroy(
+    public static boolean doDestroy(
              HttpServletRequest request
            , HttpServletResponse response
            , StringBuilder forwardPath
@@ -270,7 +270,7 @@ public class EmployeeExecute {
             EntityManager em = DBUtil.createEntityManager();
 
             // 対象の従業員データを取得
-            Employee e = getToWriteEmployee(em, request);
+            Employee e = getEmployeeToWrite(em, request);
 
             e.setDelete_flag(1);
             e.setUpdated_at(new Timestamp(System.currentTimeMillis()));
@@ -311,7 +311,7 @@ public class EmployeeExecute {
     * @param em
     * @param request
     */    
-    public static Employee getToReadEmployee(EntityManager em, HttpServletRequest request) {
+    public static Employee getEmployeeToRead(EntityManager em, HttpServletRequest request) {
         
         // 画面の出力値から従業員データを取得
         return em.find(Employee.class,Integer.parseInt(request.getParameter(REQ_ID)));
@@ -323,7 +323,7 @@ public class EmployeeExecute {
     * @param em
     * @param request
     */    
-    public static Employee getToWriteEmployee(EntityManager em, HttpServletRequest request) {
+    public static Employee getEmployeeToWrite(EntityManager em, HttpServletRequest request) {
         
         // 画面の入力力従業員データを取得
         return em.find(Employee.class,(Integer)(request.getSession().getAttribute(REQ_EMPLOYEE_ID)));
