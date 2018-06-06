@@ -93,4 +93,11 @@ public class LoginExecute {
         request.setAttribute(REQ_HAS_ERROR, true);
         return false;
     }
+    
+    public static void doLogout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        request.getSession().removeAttribute(REQ_LOGIN_EMPLOYEE);
+        request.getSession().setAttribute(REQ_FLUSH, "ログアウトしました。");
+        response.sendRedirect(request.getContextPath() + "/login");
+    }
 }

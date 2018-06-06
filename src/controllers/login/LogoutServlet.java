@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import execute.LoginExecute;
+
 /**
  * Servlet implementation class LogoutServlet
  */
@@ -27,10 +29,8 @@ public class LogoutServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getSession().removeAttribute("login_employee");
-
-        request.getSession().setAttribute("flush", "ログアウトしました。");
-        response.sendRedirect(request.getContextPath() + "/login");
+        
+        LoginExecute.doLogout(request, response);
     }
 
 }

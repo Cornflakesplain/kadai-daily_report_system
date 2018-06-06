@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import utils.PropertyUtils;
+import utils.ServletUtils;
 
 /**
  * Servlet implementation class TopPageIndexServlet
@@ -30,6 +31,9 @@ public class TopPageIndexServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    
+	    ServletUtils.existsThenSetFlush(request);
+	    
 	    RequestDispatcher rd = request.getRequestDispatcher(PropertyUtils.FORWARD_TOPPAGE);
 	    rd.forward(request, response);
 	}
