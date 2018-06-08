@@ -14,7 +14,7 @@ public class PropertyUtils {
     public static final String QRY_CHECK_REGISTERED_CODE = "checkRegisteredCode";
     public static final String QRY_CHECK_LOGIN_CODE_AND_PASSWORD = "checkLoginCodeAndPassword";
 
-    /* Employees NamedQuerys Args*/
+    /* Employees NamedQuerys Args */
     public static final String ARGS_CODE = "code";
     public static final String ARGS_PASS = "pass";
     
@@ -30,13 +30,18 @@ public class PropertyUtils {
     public static final String FORWARD_SESSION_ERROR = "/WEB-INF/views/common/sessionErr.jsp";
     public static final String FORWARD_LOGIN_LOGIN = "/WEB-INF/views/login/login.jsp";
     
-//    /* Employees Request Session */
-//    public static final String REQUEST_EMPLOYEES = "employees";
-//    public static final String REQUEST_EMPLOYEES_COUNT = "employees_count";
-//    public static final String REQUEST_FLUSH = "flush";
-//    public static final String REQUEST_PAGE = "page";
-//    public static final String REQUEST_TOKEN = "_token";
 
-
-
+    /* Reports NamedQuery */
+    public static final String QRY_GET_ALL_REPORTS = "getAllReports";
+    public static final String QRY_GET_REPORTS_COUNT = "getReportsCount";
+    
+    /* Reports Action Mapping */
+    public static final String FORWARD_REPORTS_INDEX = "/WEB-INF/views/reports/index.jsp";
+    public static final String FORWARD_REPORTS_NEW = "/WEB-INF/views/reports/new.jsp";
+    public static final String FORWARD_REPORTS_CREATE = "/WEB-INF/views/reports/create.jsp";
+    public static final String FORWARD_REPORTS_SHOW = "/WEB-INF/views/reports/show.jsp";
+    public static final String FORWARD_REPORTS_EDIT = "/WEB-INF/views/reports/edit.jsp";
+    public static final String FORWARD_REPORTS_UPDATE = "/WEB-INF/views/reports/update.jsp";
+    public static final String FORWARD_REPORTS_DESTROY = "/WEB-INF/views/reports/destroy.jsp";
+    
 }

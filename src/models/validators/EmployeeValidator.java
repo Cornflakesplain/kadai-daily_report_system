@@ -5,65 +5,97 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.apache.commons.lang.StringUtils;
+
 import models.Employee;
 import utils.DBUtil;
 import utils.PropertyUtils;
 
+/**
+ * 従業員情報 入力チェック
+ * @author J.Tamura
+ *
+ */
 public class EmployeeValidator {
+    
+    /**
+     * 入力チェック
+     * @param e
+     * @param code_duplicate_check_flag
+     * @param password_check_flag
+     * @return
+     */
     public static List<String> validate(Employee e, Boolean code_duplicate_check_flag, Boolean password_check_flag) {
         List<String> errors = new ArrayList<String>();
         
-        String code_error = _validateCode(e.getCode(), code_duplicate_check_flag);
-        if(!code_error.equals("")) {
-            errors.add(code_error);
-        }
+        // 社員番号チェック
+        validateCode(e.getCode(), code_duplicate_check_flag, errors);
         
-        String name_error = _validateName(e.getName());
-        if(!name_error.equals("")) {
-            errors.add(name_error);
-        }
+        // 氏名チェック
+        validateName(e.getName(), errors);
         
+        // パスワードチェックフラグが True である場合
         if (password_check_flag) { 
-            String password_error = _validatePassword(e.getPassword());
-            if(!password_error.equals("")) {
-                errors.add(password_error);
-            }
+            // パスワードチェック
+            validatePassword(e.getPassword(), errors);
         }
-
+        
+        // 取得したエラー情報を返却
         return errors;
 
     }
     
-    private static String _validateCode(String code, Boolean code_duplicate_check_flag) {
-        if(code == null || code.equals("")) {
-            return "社員番号を入力してください。";
+    
+    /**
+     * 社員番号 入力チェック
+     * @param code
+     * @param code_duplicate_check_flag
+     * @param errors
+     */
+    private static void validateCode(String code, Boolean code_duplicate_check_flag, List<String> errors) {
+        
+        // 未入力チェック
+        if(StringUtils.isEmpty(code)) {
+            errors.add("社員番号を入力してください。");
         }
         
+        // 重複チェック
         if(code_duplicate_check_flag) {
             EntityManager em = DBUtil.createEntityManager();
+            
+            // 入力した社員番号のデータ数を取得
             long employees_count = (long)em.createNamedQuery(PropertyUtils.QRY_CHECK_REGISTERED_CODE, Long.class)
                                             .setParameter("code", code)
                                                 .getSingleResult();
             em.close();
+            // 1件以上データが存在する場合
             if (employees_count > 0) {
-                return "入力された社員番号の情報はすでに存在しています。";
+                errors.add("入力された社員番号の情報はすでに存在しています。");
             }
         }
-        
-        return "";
     }
-    private static String _validateName(String name) {
-        if(name == null || name.equals("")) {
-            return "氏名を入力してください。";
+    
+    /**
+     * 氏名 入力チェック
+     * @param name
+     * @param errors
+     */
+    private static void validateName(String name, List<String> errors) {
+        // 未入力チェック
+        if(StringUtils.isEmpty(name)) {
+            errors.add("氏名を入力してください。");
         }
-
-        return "";
     }
 
-    private static String _validatePassword(String password) {
-        if(password == null || password.equals("")) {
-            return "パスワードを入力してください。";
+    /**
+     * パスワード 入力チェック
+     * @param password
+     * @param errors
+     */
+    private static void validatePassword(String password, List<String> errors) {
+        // 未入力チェック
+        if(StringUtils.isEmpty(password)) {
+            errors.add("パスワードを入力してください。");
         }
-        return "";
     }
 }

@@ -17,18 +17,22 @@ import utils.EncryptUtil;
 import utils.PropertyUtils;
 import utils.ServletUtils;
 
+
+
+/**
+ * ログイン機能
+ * @author J.Tamura
+ *
+ */
 public class LoginExecute {
 
     private static final String REQ__TOKEN = "_token";
     private static final String REQ_HAS_ERROR = "hasError";
     private static final String REQ_LOGIN_EMPLOYEE = "login_employee";
     private static final String REQ_FLUSH = "flush"; 
-    
     private static final String REQ_CODE = "code";
     private static final String REQ_PASSWORD = "password";
     
-
-
     
     /**
      * ログイン画面
@@ -44,6 +48,16 @@ public class LoginExecute {
         ServletUtils.existsThenSetFlush(request);
     }
     
+    
+    /**
+     * ログイン処理
+     * @param request
+     * @param response
+     * @param servlet
+     * @return
+     * @throws ServletException
+     * @throws IOException
+     */
     public static boolean doLogin(HttpServletRequest request, HttpServletResponse response, HttpServlet servlet)  throws ServletException, IOException {
         
         String code = request.getParameter(REQ_CODE);
@@ -51,7 +65,7 @@ public class LoginExecute {
 
         Employee e = null;
 
-        // コード／パスワードどちらも入力値が空白でない場合
+        // 社員番号／パスワードどちらも入力値が空白でない場合
         if(StringUtils.isNotEmpty(code) && StringUtils.isNotEmpty(plain_pass)) {
 
             // パスワードを復号化した値を取得
@@ -72,7 +86,7 @@ public class LoginExecute {
             // 指定の社員番号とパスワードに紐付くデータが存在する場合、チェックOK
             Boolean check_result = (e != null);
 
-            
+            // チェックNGである場合
             if(!check_result) {
                 request.setAttribute(REQ__TOKEN, request.getSession().getId());
                 request.getSession().setAttribute(REQ_FLUSH, "社員番号かパスワードが間違っています。");
@@ -94,6 +108,13 @@ public class LoginExecute {
         return false;
     }
     
+    /**
+     * ログアウト処理
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     public static void doLogout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         request.getSession().removeAttribute(REQ_LOGIN_EMPLOYEE);
