@@ -21,6 +21,7 @@ public class ServletUtils
     public static boolean isFairSession(HttpServletRequest request) 
     {
         
+        // セッションIDを取得
         String _token = (String)request.getParameter(REQ__TOKEN);
         if(_token !=null && _token.equals(request.getSession().getId())) 
         {
@@ -29,6 +30,11 @@ public class ServletUtils
         return false;
     }
 
+    
+    /**
+     * Flush メッセージが存在する場合は設定する
+     * @param request
+     */
     public static void existsThenSetFlush(HttpServletRequest request) {
         if(request.getSession().getAttribute(REQ_FLUSH) != null) {
             request.setAttribute(REQ_FLUSH, request.getSession().getAttribute(REQ_FLUSH));

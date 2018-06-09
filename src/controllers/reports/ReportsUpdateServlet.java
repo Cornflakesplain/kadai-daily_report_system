@@ -13,28 +13,30 @@ import execute.ReportExecute;
 import utils.PropertyUtils;
 
 /**
- * Servlet implementation class ReportShowServlet
+ * Servlet implementation class ReportsUpdateServlet
  */
-@WebServlet("/report/show")
-public class ReportShowServlet extends HttpServlet {
+@WebServlet("/reports/update")
+public class ReportsUpdateServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ReportShowServlet() {
+    public ReportsUpdateServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    ReportExecute.doShow(request, response);
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    
-	    RequestDispatcher rd = request.getRequestDispatcher(PropertyUtils.FORWARD_REPORTS_SHOW);
-	    rd.forward(request, response);
+	    if(!ReportExecute.doUpdate(request, response)) {
+	        RequestDispatcher rd = request.getRequestDispatcher(PropertyUtils.FORWARD_REPORTS_EDIT);
+	        rd.forward(request, response);
+	        
+	    }
 	    
 	}
 

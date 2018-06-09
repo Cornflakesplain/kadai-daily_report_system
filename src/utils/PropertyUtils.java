@@ -34,6 +34,9 @@ public class PropertyUtils {
     /* Reports NamedQuery */
     public static final String QRY_GET_ALL_REPORTS = "getAllReports";
     public static final String QRY_GET_REPORTS_COUNT = "getReportsCount";
+    public static final String QRY_GET_MY_ALL_REPORTS = "getMyAllReports";
+    public static final String QRY_GET_MY_REPORTS_COUNT = "getMyReportsCount";
+    
     
     /* Reports Action Mapping */
     public static final String FORWARD_REPORTS_INDEX = "/WEB-INF/views/reports/index.jsp";

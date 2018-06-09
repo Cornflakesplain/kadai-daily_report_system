@@ -44,9 +44,10 @@ public class EmployeeExecute {
      */
     public static void doIndex(HttpServletRequest request, HttpServletResponse response) {
         
+        // DB接続オブジェクトを生成
         EntityManager em = DBUtil.createEntityManager();
 
-        // ページネーションの初期化
+        // ページの初期化
         int page = 1;
         try{
             // 現在のページを取得
@@ -58,11 +59,13 @@ public class EmployeeExecute {
                                      .setFirstResult(15 * (page - 1))
                                      .setMaxResults(15)
                                      .getResultList();
-        // データ数を取得        
+        // データの総数を取得        
         long employees_count = (long)em.createNamedQuery(PropertyUtils.QRY_GET_EMPLOYEES_COUNT,Long.class)
                                            .getSingleResult();
+        // DB接続のクローズ
         em.close();
         
+        // セッション情報を設定
         request.setAttribute(REQ_EMPLOYEES, employees);
         request.setAttribute(REQ_EMPLOYEES_COUNT, employees_count);
         request.setAttribute(REQ_PAGE, page);
@@ -132,7 +135,7 @@ public class EmployeeExecute {
             em.getTransaction();
             em.close();
             
-            // Flashメッセージの設定
+            // Flashメッセージを設定
             request.getSession().setAttribute(REQ_FLUSH, "登録が完了しました。");
             
             // 指定のパスに遷移
@@ -152,13 +155,16 @@ public class EmployeeExecute {
     */   
     public static void doShow(HttpServletRequest request, HttpServletResponse response) {
         
+        // DB接続オブジェクトを生成
         EntityManager em  = DBUtil.createEntityManager();
         
         // 対象の従業員データを取得
         Employee e = getEmployeeToRead(em, request);
 
+        // DB接続のクローズ
         em.close();
         
+        // セッション情報を設定
         request.setAttribute(REQ_EMPLOYEE, e);
         request.setAttribute("_token", request.getSession().getId());
         
@@ -171,6 +177,7 @@ public class EmployeeExecute {
     */   
     public static void doEdit(HttpServletRequest request, HttpServletResponse response) {
         
+        // DB接続オブジェクトを生成
         EntityManager em = DBUtil.createEntityManager();
 
         // 対象の従業員データを取得
@@ -178,6 +185,7 @@ public class EmployeeExecute {
 
         em.close();
 
+        // セッション情報を設定
         request.setAttribute(REQ_EMPLOYEE, e);
         request.setAttribute(REQ__TOKEN, request.getSession().getId());
         request.getSession().setAttribute(REQ_EMPLOYEE_ID, e.getId());
@@ -197,6 +205,7 @@ public class EmployeeExecute {
            , StringBuilder forwardPath
     ) throws ServletException, IOException {
 
+        // セッション情報が正しい場合
         if (ServletUtils.isFairSession(request)) {
 
             EntityManager em = DBUtil.createEntityManager();

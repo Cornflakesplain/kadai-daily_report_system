@@ -1,4 +1,4 @@
-package controllers.toppage;
+package controllers.reports;
 
 import java.io.IOException;
 
@@ -9,19 +9,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import execute.TopPageExecute;
+import execute.ReportExecute;
+import utils.PropertyUtils;
 
 /**
- * Servlet implementation class TopPageIndexServlet
+ * Servlet implementation class ReportShowServlet
  */
-@WebServlet("/index.html")
-public class TopPageIndexServlet extends HttpServlet {
+@WebServlet("/reports/show")
+public class ReportsShowServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public TopPageIndexServlet() {
+    public ReportsShowServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,11 +31,11 @@ public class TopPageIndexServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    ReportExecute.doShow(request, response);
 	    
-	    TopPageExecute.doIndex(request, response);
-
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/topPage/index.jsp");
-        rd.forward(request, response);
-    }
+	    RequestDispatcher rd = request.getRequestDispatcher(PropertyUtils.FORWARD_REPORTS_SHOW);
+	    rd.forward(request, response);
+	    
+	}
 
 }

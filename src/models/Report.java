@@ -16,6 +16,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
+
 @Table(name = "reports")
 @NamedQueries({
     @NamedQuery(
@@ -26,6 +28,14 @@ import javax.servlet.http.HttpServletRequest;
             name = "getReportsCount",
             query = "SELECT COUNT(r) FROM Report AS r"
             ),
+    @NamedQuery(
+            name = "getMyAllReports",
+            query = "SELECT r FROM Report AS r WHERE r.employee = :employee ORDER BY r.id DESC"
+            ),
+    @NamedQuery(
+            name = "getMyReportsCount",
+            query = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :employee"
+            )
 })
 @Entity
 public class Report {
@@ -122,17 +132,27 @@ public class Report {
         
         this.setEmployee((Employee)request.getSession().getAttribute("login_employee"));
 
+        // 現在の日付を取得
         Date report_date = new Date(System.currentTimeMillis());
-        String rd_str = request.getParameter("report_date");
-        if(rd_str != null && !rd_str.equals("")) {
+
+        // 入力値に日付が入力されている場合
+        if(StringUtils.isNotEmpty(request.getParameter("report_date"))) {
+            // 入力値を優先して設定
             report_date = Date.valueOf(request.getParameter("report_date"));
         }
-        this.setReport_date(report_date);
-
+        
+        // 日付がデータベースに登録されていない場合
+        if(this.getReport_date() == null) {
+            this.setReport_date(report_date);
+        }
+        
         this.setTitle(request.getParameter("title"));
         this.setContent(request.getParameter("content"));
 
-        this.setCreated_at(currentTime);
+        // 新規追加である場合
+        if(isNewRecord) {
+            this.setCreated_at(currentTime);
+        }
         this.setUpdated_at(currentTime);
 
     }
