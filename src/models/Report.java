@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.servlet.http.HttpServletRequest;
 
 @Table(name = "reports")
 @NamedQueries({
@@ -107,5 +108,32 @@ public class Report {
 
     public void setUpdated_at(Timestamp updated_at) {
         this.updated_at = updated_at;
+    }
+    
+    /**
+     * 編集情報の設定
+     * @param request
+     * @param servlet
+     * @param isUpdate    新規追加である
+     */
+    public void setEditedItems(HttpServletRequest request, boolean isNewRecord) {
+
+        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+        
+        this.setEmployee((Employee)request.getSession().getAttribute("login_employee"));
+
+        Date report_date = new Date(System.currentTimeMillis());
+        String rd_str = request.getParameter("report_date");
+        if(rd_str != null && !rd_str.equals("")) {
+            report_date = Date.valueOf(request.getParameter("report_date"));
+        }
+        this.setReport_date(report_date);
+
+        this.setTitle(request.getParameter("title"));
+        this.setContent(request.getParameter("content"));
+
+        this.setCreated_at(currentTime);
+        this.setUpdated_at(currentTime);
+
     }
 }

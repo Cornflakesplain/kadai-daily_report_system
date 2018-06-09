@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Report;
+import models.validators.ReportValidator;
 import utils.DBUtil;
 import utils.PropertyUtils;
 import utils.ServletUtils;
@@ -18,9 +19,13 @@ public class ReportExecute {
 
     private static final String REQ__TOKEN = "_token";
     private static final String REQ_REPORT = "report";
+    private static final String REQ_REPORT_DATE = "report_date";
     private static final String REQ_REPORTS = "reports";
-    private static final String REQ_REPORT_ID = "report_id";
     private static final String REQ_REPORTS_COUNT = "reports_count";
+    private static final String REQ_LOGIN_EMPLOYEE = "login_employee";
+    private static final String REQ_TITLE = "title";
+    private static final String REQ_CONTENT = "content";
+    
     private static final String REQ_PAGE = "page";
     private static final String REQ_FLUSH = "flush";
     private static final String REQ_ERRORS = "errors";
@@ -56,9 +61,9 @@ public class ReportExecute {
         
         em.close();
         
-        request.setAttribute("reports", reports);
-        request.setAttribute("reports_count", reports_count);
-        request.setAttribute("page", page);
+        request.setAttribute(REQ_REPORTS, reports);
+        request.setAttribute(REQ_REPORTS_COUNT, reports_count);
+        request.setAttribute(REQ_PAGE, page);
         
         // Flushメッセージが存在する場合は取得
         ServletUtils.existsThenSetFlush(request);
@@ -81,4 +86,67 @@ public class ReportExecute {
         request.setAttribute(REQ_REPORT, r);
     
     }
+    
+    public static boolean doCreate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        if(ServletUtils.isFairSession(request)) {
+            
+            EntityManager em = DBUtil.createEntityManager();
+            System.out.println(request.getParameter(REQ_REPORT_DATE));
+
+            Report r = new Report();
+
+            r.setEditedItems(request,true);
+
+            List<String> errors = ReportValidator.validate(r);
+            if(errors.size() > 0) {
+                em.close();
+
+                setInputError(request, r, errors);
+                return false;
+
+            } else {
+                em.getTransaction().begin();
+                em.persist(r);
+                em.getTransaction().commit();
+                em.close();
+                request.getSession().setAttribute(REQ_FLUSH, "登録が完了しました。");
+
+                response.sendRedirect(request.getContextPath() + "/reports/index");
+                return true;
+            }
+        }
+        return false;
+
+    }
+    
+    public static void doShow(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        EntityManager em = DBUtil.createEntityManager();
+
+        Report r = em.find(Report.class, Integer.parseInt(request.getParameter("id")));
+
+        em.close();
+
+        request.setAttribute(REQ_REPORT, r);
+        request.setAttribute(REQ__TOKEN, request.getSession().getId());
+
+    }
+    
+    /**
+    * 入力エラー情報設定
+    * @param request
+    * @param response
+    * @param forwordUrl
+    */    
+    public static void setInputError(
+              HttpServletRequest request
+            , Report r
+            , List<String> errors)
+    {
+        request.setAttribute(REQ__TOKEN, request.getSession().getId());
+        request.setAttribute(REQ_REPORT, r);
+        request.setAttribute(REQ_ERRORS, errors);
+    }
+    
+    
 }
